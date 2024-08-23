@@ -49,7 +49,7 @@
           </p>
         </div>
         <label
-          for="image-upload"
+          for="pdf-upload"
           class="group relative mt-2 flex h-72 cursor-pointer flex-col items-center justify-center rounded-md border border-gray-300 bg-white shadow-sm transition-all hover:bg-gray-50"
         >
           {#if !file}
@@ -90,10 +90,10 @@
         </label>
         <div class="mt-1 flex rounded-md shadow-sm">
           <input
-            id="image-upload"
-            name="image-upload"
+            id="pdf-upload"
+            name="pdf-upload"
             type="file"
-            accept="image/*"
+            accept="application/pdf"
             class="sr-only"
             on:change={onChange}
           />
