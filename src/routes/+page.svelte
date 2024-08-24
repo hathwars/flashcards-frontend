@@ -106,6 +106,9 @@
       >
         <p class="text-sm">Confirm upload of {!file ? "Null file": file.name}</p>
       </button>
+      {#if form?.error}
+        <p>form.error</p>
+      {/if}
       {#if form && !file}
         <div class="p-2">
           <p class="font-semibold text-gray-900">File uploaded!</p>
