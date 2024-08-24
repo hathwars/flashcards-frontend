@@ -7,6 +7,10 @@ export const actions = {
     const form = await request.formData()
     const file = form.get('pdf-upload') as File
 
+    console.log("Form:", form);
+    console.log(`File size: ${file.size} bytes`);
+    console.log("File:", file);
+    
     if (!file) {
       error(400, { message: 'No file to upload.' })
     }
