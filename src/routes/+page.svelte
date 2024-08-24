@@ -104,7 +104,7 @@
         disabled={!file}
         class="{buttonClass} flex h-10 w-full items-center justify-center rounded-md border text-sm transition-all focus:outline-none"
       >
-        <p class="text-sm">Confirm upload of {file.name}</p>
+        <p class="text-sm">Confirm upload of {!file ? "Null file": file.name}</p>
       </button>
       {#if form && !file}
         <div class="p-2">
