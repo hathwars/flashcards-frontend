@@ -1,0 +1,86 @@
+[
+    {
+        "question": " How does the Residual Reduction Algorithm (RRA) approach reducing residuals with DC offsets, and what is the role of the equation for computing the change in a parameter to eliminate the DC offset?",
+        "sources": [
+            "R =R −d\nnew old R\nHere, R is the original residual with the DC offset d . If we remove the DC offset from R , i.e. if we\nold R old\nsubtract the DC offset from R , we get R .\nold new\n2.1 Reducing Forward-Backward Rocking\nWe will reduce the residual MZ by independently altering two parameters: the torso center of mass x-\ncoordinate by an amount ∆t and the lumbar extension angle by an amount ∆l .\nx e\n2.1.1 Altering the Torso Center of Mass"
+        ],
+        "answer": " The RRA reduces DC offset residuals by altering torso center of mass or lumbar angle using that equation to compute the change in a parameter for eliminating the DC offset."
+    },
+    {
+        "question": " How would you compute the amount ∆t by which to alter the x-coordinate of the torso center of mass in order to balance the DC offset of the MZ residual, and what are the variables and equations involved in this computation?",
+        "sources": [
+            "Subsituting into the previous equation and extracting just the x-coordinates, we have\n−mg∆l =d .\nz MX\nNow if we write ∆l =∆lcosθ where θ is the angle representing the orientation of the vector ∆l relative to\nz\nthepositivey-axis,andsinceweknowthelengthofthevectoris∆l=r ∆l ,wehavethat∆l =r ∆l sinθ,\n0 b z 0 b\nso substituting into the above equation yields\n−mgr ∆l sinθ =d\n0 b MX\nd\n∆l =− MX .\nb mgr sinθ\n0"
+        ],
+        "answer": " To compute ∆t, solve the equation -mgr*Δl*sinθ = d for ∆l and set ∆l = -d/(mgr*sinθ). Then, ∆t = -Δl*cosθ. Variables: m, g, r, d, θ. Equation: -mgr*Δl*sinθ = d."
+    },
+    {
+        "question": " How does altering the lumbar extension angle by ∆l and the torso center of mass x-coordinate by d/mg contribute to reducing the DC offset of the MZ residual in a walking model, and what is the relationship between ∆t, d, and mg expressed by equation (1)?",
+        "sources": [
+            "assume that ∆l is just r rotated counterclockwise by 90◦ and scaled. Since we defined θ to be the angle\n0\nswept counterclockwise from the positive x-axis to ∆l, then we can assume that θ = α+90◦ = l +180◦.\ne\nHence we have\ncosθ =cos(l +180◦)=cosl cos180◦−sinl sin180◦ =−cosl\ne e e e\nso\nd\n∆l =− MZ . (2)\ne mgr cosl\n0 e\n2.2 Reducing Left-Right Rocking\nWe will reduce the residual MX by independently altering two parameters: the torso center of mass z-"
+        ],
+        "answer": " Altering lumbar angle ∆l and torso COM x-coordinate d/mg reduces DC offset of MZ residual by ∆l = - MZ cos(l+180°) and d = ∆l mg/cosθ (equation 1)."
+    },
+    {
+        "question": " Calculate the moment arm (lever arm) of a muscle using the approximation δl/δθ and the definition of moment as M = r x F, where r is the position vector, F is the force vector, and x denotes the cross product. Given the change in length of the muscle ∆l and the small angle ∆θ it spans, derive an expression for the moment arm in terms of ∆l, ∆θ, and M.",
+        "sources": [
+            "them. Suppose the vectors are oriented so that ∆l is drawn in a positive sense (counterclockwise) when it\ne\nis drawn from r to r . Let ∆l = r −r . Assuming ∆l is small, we can apply an approximation from\n0 1 1 0 e\nbiomechanics which states that the moment arm (lever arm) of a muscle is equal to δl/δθ where δl is the\nchange in length of the muscle when the joint spanned by the muscle rotates by a small angle δθ. Applying\nthis approximation to our triangle, we have that\nr =∆l/∆l\n0 e\n∆l=r ∆l ,\n0 e"
+        ],
+        "answer": " Moment arm = (∆l^2 \\* M) / (∆θ \\* ||F|| \\* ∆l) = (∆l \\* M) / (∆θ \\* ||F||)"
+    },
+    {
+        "question": " Calculate the new value of MX at any torso position after the center of mass has been displaced in the z direction by ∆t, given the original MX value as r × mg (old) and the torso moment arm as r + ∆t in the z direction.",
+        "sources": [
+            "that r may not have the same magnitude as r . Then the new value of MX is:\n1 0\nMX = r ×mg\nnew 1\n= (r +(0,0,∆t ))×mg\n0 z\n= r ×mg+(0,0,∆t )×mg\n0 z\nLet d = (d ,0,0), i.e. d is a vector representation of the DC offset. Now we plus the above\nMX MX MX\nexpressions into the equation MX −MX =d :\nold new MX\nr ×mg−(r ×mg+(0,0,∆t )×mg)=d\n0 0 z MX\nThe r ×mg expressions cancel out on both sides, and the value of the remaining cross product is\n0\n(cid:12) (cid:12)\n(cid:12) i j k (cid:12)\n(cid:12) (cid:12)"
+        ],
+        "answer": " The new value of MX is r × mg + (0, 0, mg × ∆t)."
+    },
+    {
+        "question": " How does altering the lumbar bending angle and the torso center of mass affect the reduction of the DC offset for the MX residual in a walking model, and what is the suggested computation for changing these values?",
+        "sources": [
+            "2.2.2 Altering the Lumbar Bending Angle\nNow we wish to compute an amount ∆l by which to alter the lumbar bending angle (throughout the entire\nb\ntime interval, not just at the initial time) so that the DC offset for MX is reduced. We can represent the\nalteration of the lumbar bending angle with the following geometry: consider the triangle consisting of two\nvectors r and r with equal length r and with a common starting point with an angle ∆l between them.\n0 1 0 b"
+        ],
+        "answer": " Altering lumbar bending angle and torso center of mass can reduce DC offset for MX residual in walking model by computing the change in lumbar bending angle (∆l) using the geometry of two vectors r with angle ∆l between them."
+    },
+    {
+        "question": " How does the alteration of the lumbar bending angle, represented by the angle θ between vectors r and ∆l, affect the moment (MX or MY) generated by a muscle's force (mg) in relation to the distance (d) between the muscle's attachment points, according to the given biomechanical approximation and triangle geometry?",
+        "sources": [
+            "them. Suppose the vectors are oriented so that ∆l is drawn in a positive sense (counterclockwise) when it\ne\nis drawn from r to r . Let ∆l = r −r . Assuming ∆l is small, we can apply an approximation from\n0 1 1 0 e\nbiomechanics which states that the moment arm (lever arm) of a muscle is equal to δl/δθ where δl is the\nchange in length of the muscle when the joint spanned by the muscle rotates by a small angle δθ. Applying\nthis approximation to our triangle, we have that\nr =∆l/∆l\n0 e\n∆l=r ∆l ,\n0 e"
+        ],
+        "answer": " The moment generated by a muscle's force is proportional to the product of the muscle's force, the change in length of the muscle (∆l), and the distance (d) between the muscle's attachment points, divided by the change in the lumbar bending angle (θ)."
+    },
+    {
+        "question": " How does the Residual Reduction Algorithm (RRA) use the musculoskeletal model and motion file to reduce the MX and MZ DC offsets in the simulation pipeline?",
+        "sources": [
+            "2. the motion file containing the kinematics and ground reaction data for the subject at a finite set of\ndiscrete time instants t ,t ,...,t ,\n1 2 N\n3. whether torso x or lumbar extension will be used to reduce the MX DC offset, and\n4. whether torso z or lumbar bending will be used to reduce the MZ DC offset.\nThe first pass of RRA consists of the following steps.\n1. Run CMC once on the subject model using the given motion data.\n2. Compute the torso x correction amount ∆t using equation 1.\nx"
+        ],
+        "answer": " RRA uses the musculoskeletal model in CMC and motion file data to reduce MX/MZ DC offsets by computing torso x/z corrections."
+    },
+    {
+        "question": " What are the steps and conditions for computing the correction amounts in the first pass of the RRA process, and how are these values written to a file for use in subsequent passes?",
+        "sources": [
+            "next pass of RRA will automatically apply the values in this file as corrections to the input model and\ninput motion data. So if any correction amount is listed as zero in the file, the result of applying that\ncorrection amount to the input model or motion data is the equivalent of making no correction at all.\nFor instance, if ∆t =0, then adding ∆t to the original value of t in the second pass of RRA is the\nx x x\nsame as making no change to the original value of t .\nx"
+        ],
+        "answer": " In the first pass of RRA, correction amounts are computed by comparing input model and motion data to reference values. These computed correction amounts are then written to a file for use in subsequent passes."
+    },
+    {
+        "question": " How does the Revised Radial Alignment (RRA) method determine the correction amounts for reducing MX DC offset when the user chooses l as the parameter to alter, and how is this applied to the subject model's limb lengths?",
+        "sources": [
+            "Now we wish to compute an amount ∆l by which to alter the lumbar extension angle (throughout the\ne\nentire time interval, not just at the initial time) so that the DC offset for MZ is reduced. We can represent\nthe alteration of the lumbar extension angle with the following geometry: consider the triangle consisting of\ntwo vectors r and r with equal length r and with a common starting point with an angle ∆l between\n0 1 0 e"
+        ],
+        "answer": " The RRA method determines ∆l to reduce MX DC offset by altering lumbar extension angle using a triangle with angle ∆l and equal length vectors r and r. It's applied to the subject model's limb lengths by adjusting the lumbar extension angle accordingly."
+    },
+    {
+        "question": " \"How do the optimization solutions for static and dynamic walking compare, and what are the implications for understanding human gait, as discussed in Anderson and Pandy (2001)?\"",
+        "sources": [
+            "b b b b\nso\nd\n∆l =− MX . (4)\nb mgr cosl\n0 b\n42.3 Residual Reduction Algorithm (RRA)\nThefollowingalgorithmwillattempttoreducetheMX andMZ DCoffsetsifitisexecutedaftertheinverse\nkinematics stage of the simulation pipeline and before the CMC stage. We omit implementation details and\npresent only the essential components of RRA here. For our purposes, the inputs needed are:\n1. the musculoskeletal model for the subject whose motion is being simulated,"
+        ],
+        "answer": " Anderson and Pandy (2"
+    },
+    {
+        "question": " How does the guided optimization approach for balanced locomotion, as discussed in the 1995 Computer Animation and Simulation paper by M. van de Panne and A. Lamouret, contribute to the understanding and modeling of muscle control in human movement, as explored in the 2003 Journal of Biomechanics article by H. Putte et al.?",
+        "sources": [
+            "them. Suppose the vectors are oriented so that ∆l is drawn in a positive sense (counterclockwise) when it\ne\nis drawn from r to r . Let ∆l = r −r . Assuming ∆l is small, we can apply an approximation from\n0 1 1 0 e\nbiomechanics which states that the moment arm (lever arm) of a muscle is equal to δl/δθ where δl is the\nchange in length of the muscle when the joint spanned by the muscle rotates by a small angle δθ. Applying\nthis approximation to our triangle, we have that\nr =∆l/∆l\n0 e\n∆l=r ∆l ,\n0 e"
+        ],
+        "answer": " The 1995 paper's guided optimization approach contributes by providing a method to model muscle control and moment arms, relevant to the biomechanics focus of the 2003 article."
+    }
+]
