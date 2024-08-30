@@ -284,7 +284,7 @@
 <script lang="ts">
   import { Upload } from 'lucide-svelte';
   import { onMount } from 'svelte';
-  import flashcardsData from '/Users/shathwar/flashcards-frontend/src/data/example_flashcards_data.json';
+  import flashcardsData from '../data/example_flashcards_data.json';
 
   let pdfFile: File | null = null;
   let error: string = '';
