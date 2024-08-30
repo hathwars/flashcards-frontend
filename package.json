@@ -13,6 +13,7 @@
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json --watch"
   },
   "devDependencies": {
+    "@sveltejs/adapter-node": "1.0.0-next.106",
     "@sveltejs/adapter-vercel": "^4.0.3",
     "@sveltejs/kit": "^2.0.6",
     "@sveltejs/vite-plugin-svelte": "^3.0.1",
@@ -27,6 +28,7 @@
   },
   "dependencies": {
     "@vercel/blob": "^0.16.1",
-    "dotenv-expand": "^10.0.0"
+    "dotenv-expand": "^10.0.0",
+    "lucide-svelte": "^0.436.0"
   }
 }

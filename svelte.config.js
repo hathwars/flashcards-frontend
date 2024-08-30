@@ -7,6 +7,14 @@ const config = {
     adapter: adapter(),
   },
   preprocess: vitePreprocess(),
+  vite: {
+    server: {
+      fs: {
+        allow: ['/Users/shathwar/flashcards-frontend/example_flashcards_data.json'],
+      },
+    },
+  },
 }
+
 
 export default config

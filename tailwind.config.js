@@ -2,7 +2,16 @@
 export default {
   content: ['./src/**/*.{html,js,svelte,ts}'],
   theme: {
-    extend: {},
+    extend: {
+      transitionProperty: {
+        'transform': 'transform',
+      },
+    },
+  },
+  variants: {
+    extend: {
+      backfaceVisibility: ['hover', 'focus'],
+    },
   },
   plugins: [],
 }
