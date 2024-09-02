@@ -1,15 +1,36 @@
-<!-- <script lang="ts">
+<script lang="ts">
+  import { Loader2, Upload } from 'lucide-svelte';
+  import flashcardsData from '../data/example_flashcards_data.json';
+
   let pdfFile: File | null = null;
-  
+  let error: string = '';
+  let isLoading: boolean = false;
+
   type FlashCard = {
     question: string;
     sources: string[];
     answer: string;
+    isFlipped: boolean;
+  }
+  let flashcards: FlashCard[] = [];
+  let sourcesDropdown: boolean = false;
+
+
+  function uploadPdfMock() {
+    if (!pdfFile) {
+      error = 'No file selected';
+      return;
+    }
+
+    isLoading = true;
+    setTimeout(() => {
+      flashcards = flashcardsData.map(card => ({ ...card, isFlipped: false }));
+      error = '';
+      isLoading = false;
+    }, 2000); // Simulate 2 seconds of loading time
   }
 
-  let flashcards: FlashCard[] = [];
-
-  async function uploadPdf() {
+  async function uploadPdfReal() {
     if (!pdfFile) {
       console.error('No file selected');
       return;
@@ -19,13 +40,15 @@
     formData.append('file', pdfFile);
 
     try {
+      isLoading = true;
+      // TODO: replace with real logs
       console.log(pdfFile?.name)
       console.log(formData)
-      // TODO environment variable
-      const url = 'https://web-dximtpyqdxz3.up-de-fra1-k8s-1.apps.run-on-seenode.com/uploadpdf/'
+
+      const url = import.meta.env.VITE_API_URL
       const response = await fetch(url, {
         method: 'POST',
-        body: formData,    
+        body: formData,
         headers: {
           'accept': 'application/json'
         },
@@ -40,277 +63,12 @@
       }
     } catch (error) {
       console.error('Error uploading PDF:', error);
+    } finally {
+      isLoading = false;
     }
   }
 
-  function handleFileUpload(event: any) {
-  pdfFile = event.currentTarget.files?.[0] ?? null;
-  }
-</script>
-
-<h1>Upload PDF to Generate Flashcards</h1>
-
-<form>
-  <input type="file" accept=".pdf" on:change={handleFileUpload} />
-  <button on:click={uploadPdf}>Upload PDF</button>
-</form>
-
-{#if flashcards.length > 0}
-  <h2>Flashcards:</h2>
-  {#each flashcards as flashcard}
-    <div class="flashcard">
-      <h3>Question:</h3>
-      <p>{flashcard.question}</p>
-      <h3>Answer:</h3>
-      <p>{flashcard.answer}</p>
-      <h3>Source:</h3>
-      <p>{flashcard.sources}</p>
-    </div>
-  {/each}
-{/if}
-# #######
-<script>
-  import { Upload } from 'lucide-svelte';
-  
-  let file = null;
-  let error = '';
-
-  function handleFileChange(event) {
-    const selectedFile = event.target.files[0];
-    if (selectedFile && selectedFile.type === 'application/pdf') {
-      file = selectedFile;
-      error = '';
-    } else {
-      file = null;
-      error = 'Please select a valid PDF file.';
-    }
-  }
-
-  function handleUpload() {
-    if (file) {
-      // Here you would implement the actual file upload and processing logic
-      console.log('Uploading file:', file.name);
-      // After successful upload, you might want to redirect the user or show a success message
-    } else {
-      error = 'Please select a PDF file before uploading.';
-    }
-  }
-</script>
-
-<div class="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">
-  <div class="max-w-md w-full space-y-8 bg-white p-6 rounded-xl shadow-md">
-    <div class="text-center">
-      <h2 class="mt-6 text-3xl font-extrabold text-gray-900">PDF to Flashcards</h2>
-      <p class="mt-2 text-sm text-gray-600">Upload your PDF and get study-ready flashcards in seconds!</p>
-    </div>
-    <div class="mt-8 space-y-6">
-      <div class="flex items-center justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-        <div class="space-y-1 text-center">
-          <Upload class="mx-auto h-12 w-12 text-gray-400" />
-          <div class="flex text-sm text-gray-600">
-            <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-              <span>Upload a PDF</span>
-              <input id="file-upload" name="file-upload" type="file" class="sr-only" on:change={handleFileChange} accept=".pdf" />
-            </label>
-          </div>
-          <p class="text-xs text-gray-500">{file ? file.name : 'PDF up to 10MB'}</p>
-        </div>
-      </div>
-      {#if error}
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-          <strong class="font-bold">Error!</strong>
-          <span class="block sm:inline">{error}</span>
-        </div>
-      {/if}
-      <button 
-        on:click={handleUpload} 
-        class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        disabled={!file}
-      >
-        Generate Flashcards
-      </button>
-    </div>
-  </div>
-</div>
-
-<style>
-  /* You can add any additional styles here if needed */
-</style> -->
-<!-- TODO: retain -->
-<!-- <script lang="ts">
-  import { Upload } from 'lucide-svelte';
-  import { onMount } from 'svelte';
-  import flashcardsData from '/Users/shathwar/flashcards-frontend/example_flashcards_data.json';
-
-  let pdfFile: File | null = null;
-  let error: string = '';
-
-  type FlashCard = {
-    question: string;
-    sources: string[];
-    answer: string;
-  }
-  let flashcards: FlashCard[] = [];
-
-  onMount(() => {
-    // Load flashcards from local JSON file on component mount
-    flashcards = flashcardsData;
-  });
-
-  async function uploadPdf() {
-    if (!pdfFile) {
-      error = 'No file selected';
-      return;
-    }
-    // For testing, we'll just use the local JSON data instead of making an API call
-    flashcards = flashcardsData;
-    error = '';
-  }
-
-  function handleFileUpload(event: Event) {
-    const target = event.target as HTMLInputElement;
-    if (target.files) {
-      pdfFile = target.files[0];
-      error = '';
-    }
-  }
-
-  // async function uploadPdf() {
-  //   if (!pdfFile) {
-  //     error = 'No file selected';
-  //     return;
-  //   }
-  //   const formData = new FormData();
-  //   formData.append('file', pdfFile);
-  //   try {
-  //     console.log(pdfFile?.name)
-  //     console.log(formData)
-  //     // TODO environment variable
-  //     // TODO: change this back
-  //     // const url = 'https://web-dximtpyqdxz3.up-de-fra1-k8s-1.apps.run-on-seenode.com/uploadpdf/'
-  //     const response = await fetch("/Users/shathwar/flashcards-frontend/example_flashcards_data.json",
-  //     {method: 'GET', body: formData}
-  //     );
-
-  //     // const response = await fetch(url, {
-  //     //   method: 'POST',
-  //     //   body: formData,
-  //     //   headers: {
-  //     //     'accept': 'application/json'
-  //     //   },
-  //     //   mode: 'cors', // Enable CORS
-  //     // });
-  //     console.log(response)
-  //     if (response.ok) {
-  //       flashcards = await response.json();
-  //       console.log(flashcards);
-  //       error = '';
-  //     } else {
-  //       error = 'Error uploading PDF: ' + response.status;
-  //     }
-  //   } catch (error) {
-  //     console.error('Error uploading PDF:', error);
-  //     error = 'Error uploading PDF. Please try again.';
-  //   }
-  // }
-
-  // function handleFileUpload(event: Event) {
-  //   const target = event.target as HTMLInputElement;
-  //   if (target.files) {
-  //     pdfFile = target.files[0];
-  //     error = '';
-  //   }
-  // }
-</script>
-
-<div class="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">
-  <div class="max-w-2xl w-full space-y-8 bg-white p-6 rounded-xl shadow-md">
-    <div class="text-center">
-      <h1 class="mt-6 text-3xl font-extrabold text-gray-900">PDF to Flashcards</h1>
-      <p class="mt-2 text-sm text-gray-600">Upload your PDF and get study-ready flashcards in seconds!</p>
-    </div>
-    <div class="mt-8 space-y-6">
-      <div class="flex items-center justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-        <div class="space-y-1 text-center">
-          <Upload class="mx-auto h-12 w-12 text-gray-400" />
-          <div class="flex text-sm text-gray-600">
-            <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-              <span>Upload a PDF</span>
-              <input id="file-upload" name="file-upload" type="file" class="sr-only" on:change={handleFileUpload} accept=".pdf" />
-            </label>
-          </div>
-          <p class="text-xs text-gray-500">{pdfFile ? pdfFile.name : 'PDF up to 10MB'}</p>
-        </div>
-      </div>
-      {#if error}
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-          <strong class="font-bold">Error!</strong>
-          <span class="block sm:inline">{error}</span>
-        </div>
-      {/if}
-      <button 
-        on:click={uploadPdf} 
-        class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        disabled={!pdfFile}
-      >
-        Generate Flashcards
-      </button>
-    </div>
-
-    {#if flashcards.length > 0}
-      <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">Flashcards:</h2>
-      <div class="space-y-4">
-        {#each flashcards as flashcard}
-          <div class="flashcard bg-white border border-gray-200 rounded-lg shadow-sm p-4">
-            <h3 class="text-lg font-semibold text-gray-800">Question:</h3>
-            <p class="mt-1 text-gray-600">{flashcard.question}</p>
-            <h3 class="text-lg font-semibold text-gray-800 mt-4">Answer:</h3>
-            <p class="mt-1 text-gray-600">{flashcard.answer}</p>
-            <h3 class="text-lg font-semibold text-gray-800 mt-4">Source:</h3>
-            <p class="mt-1 text-gray-600">{flashcard.sources.join(', ')}</p>
-          </div>
-        {/each}
-      </div>
-    {/if}
-  </div>
-</div>
-
-<style>
-  /* You can add any additional styles here if needed */
-</style> -->
-
-<!-- try 2 -->
-
-<script lang="ts">
-  import { Upload } from 'lucide-svelte';
-  import { onMount } from 'svelte';
-  import flashcardsData from '../data/example_flashcards_data.json';
-
-  let pdfFile: File | null = null;
-  let error: string = '';
-
-  type FlashCard = {
-    question: string;
-    sources: string[];
-    answer: string;
-    isFlipped: boolean;
-  }
-  let flashcards: FlashCard[] = [];
-  let sourcesDropdown: boolean = false;
-  onMount(() => {
-    // Load flashcards from local JSON file on component mount
-    flashcards = flashcardsData.map(card => ({ ...card, isFlipped: false }));
-  });
-
-  function uploadPdf() {
-    if (!pdfFile) {
-      error = 'No file selected';
-      return;
-    }
-    // For testing, we'll just use the local JSON data instead of making an API call
-    flashcards = flashcardsData.map(card => ({ ...card, isFlipped: false }));
-    error = '';
-  }
+  const uploadPdf = import.meta.env.VITE_MODE === 'development' && import.meta.env.VITE_USE_MOCK_DATA === 'true' ? uploadPdfMock : uploadPdfReal;
 
   function handleFileUpload(event: Event) {
     const target = event.target as HTMLInputElement;
@@ -359,11 +117,17 @@
         </div>
       {/if}
       <button on:click={uploadPdf} class={`w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${
-        !pdfFile ? 'opacity-50 cursor-not-allowed' : ''
-      }`} disabled={!pdfFile}>
+        !pdfFile || isLoading ? 'opacity-50 cursor-not-allowed' : ''
+      }`} disabled={!pdfFile || isLoading}>
         {flashcards.length > 0 ? 'Regenerate Flashcards' : 'Generate Flashcards'}
       </button>
     </div>
+    {#if isLoading}
+      <div class="flex items-center justify-center space-x-2 mt-4">
+        <Loader2 class="animate-spin h-5 w-5 text-indigo-600" />
+        <span class="text-indigo-600 font-medium">Generating flashcards...</span>
+      </div>
+    {/if}
   </div>
   {#if flashcards.length > 0}
   <div class="max-w-4xl w-full mt-8 bg-white p-6 rounded-xl shadow-md h-2/3 overflow-y-auto">
