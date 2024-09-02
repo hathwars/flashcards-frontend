@@ -296,7 +296,7 @@
     isFlipped: boolean;
   }
   let flashcards: FlashCard[] = [];
-
+  let sourcesDropdown: boolean = false;
   onMount(() => {
     // Load flashcards from local JSON file on component mount
     flashcards = flashcardsData.map(card => ({ ...card, isFlipped: false }));
@@ -358,50 +358,47 @@
           <span class="block sm:inline">{error}</span>
         </div>
       {/if}
-      <button 
-        on:click={uploadPdf} 
-        class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        disabled={!pdfFile}
-      >
-        Generate Flashcards
+      <button on:click={uploadPdf} class={`w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${
+        !pdfFile ? 'opacity-50 cursor-not-allowed' : ''
+      }`} disabled={!pdfFile}>
+        {flashcards.length > 0 ? 'Regenerate Flashcards' : 'Generate Flashcards'}
       </button>
     </div>
-
-    {#if flashcards.length > 0}
-  <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">Your Flashcards:</h2>
-  <div class="overflow-x-auto pb-4">
-    <div class="flex space-x-4" style="width: max-content;">
-      {#each flashcards as flashcard, index}
-        <div 
-          role="button"
-          tabindex="0"
-          class="flashcard w-80 h-48 bg-white border border-gray-200 rounded-lg shadow-sm p-4 cursor-pointer transition-transform duration-300 transform perspective-1000"
-          class:flip={flashcard.isFlipped}
-          on:click={() => flipCard(index)}
-          on:keydown={(event) => handleKeydown(event, index)}
-          aria-label={`Flashcard ${index + 1}: ${flashcard.isFlipped ? 'Answer' : 'Question'}`}
-        >
+  </div>
+  {#if flashcards.length > 0}
+  <div class="max-w-4xl w-full mt-8 bg-white p-6 rounded-xl shadow-md h-2/3 overflow-y-auto">
+    <div class="overflow-x-auto pb-4">
+      <div class="flex space-x-4" style="width: max-content;">
+        {#each flashcards as flashcard, index}
+        <div role="button" tabindex="0" class="flashcard w-80 h-48 bg-white border border-gray-200 rounded-lg shadow-sm p-4 cursor-pointer transition-transform duration-300 transform perspective-1000" class:flip={flashcard.isFlipped} on:click={() => flipCard(index)} on:keydown={(event) => handleKeydown(event, index)} aria-label={`Flashcard ${index + 1}: ${flashcard.isFlipped ? 'Answer' : 'Question'}`}>
           <div class="flashcard-inner w-full h-full relative transform-style-3d transition-transform duration-300">
             <div class="flashcard-front absolute w-full h-full backface-hidden flex items-center justify-center p-4">
-              <p class="text-lg font-semibold text-center">{flashcard.question}</p>
+              <p class="text-sm font-semibold text-center">{flashcard.question}</p>
             </div>
             <div class="flashcard-back absolute w-full h-full backface-hidden flex flex-col justify-between p-4 transform rotate-y-180">
               <div>
-                <h3 class="text-lg font-semibold text-gray-800">Answer:</h3>
-                <p class="mt-1 text-gray-600">{flashcard.answer}</p>
+                <p class="mt-1 text-sm text-gray-600">{flashcard.answer}</p>
               </div>
-              <div>
-                <h3 class="text-sm font-semibold text-gray-800">Source:</h3>
-                <p class="text-xs text-gray-600">{flashcard.sources.join(', ')}</p>
+              <div class="sources-dropdown">
+                <button class="text-sm font-semibold text-gray-800" on:click={(event) => {event.stopPropagation(); sourcesDropdown = !sourcesDropdown;}}>
+                  Sources {sourcesDropdown ? '↑' : '↓'}
+                </button>
+                {#if sourcesDropdown}
+                <div class="sources-list text-xs text-gray-600">
+                  {#each flashcard.sources as source}
+                  <p>{source}</p>
+                  {/each}
+                </div>
+                {/if}
               </div>
             </div>
           </div>
         </div>
-      {/each}
+        {/each}
+      </div>
     </div>
   </div>
-{/if}
-  </div>
+  {/if}
 </div>
 
 <style>
@@ -419,5 +416,15 @@
   }
   .flip .flashcard-inner {
     transform: rotateY(180deg);
+  }
+  .sources-dropdown {
+    position: relative;
+  }
+  .sources-list {
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 4px;
+    z-index: 1;
   }
 </style>
