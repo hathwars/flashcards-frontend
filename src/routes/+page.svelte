@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Loader2, Upload } from 'lucide-svelte';
+  import { Loader2, Upload, Download } from 'lucide-svelte';
   import flashcardsData from '../data/example_flashcards_data.json';
 
   let pdfFile: File | null = null;
@@ -89,6 +89,29 @@
       flipCard(index);
     }
   }
+
+  function exportFlashcards() {
+      const exportData = flashcards.map(({ question, answer, sources }) => ({
+        question,
+        answer,
+        sources
+      }));
+      
+      const jsonString = JSON.stringify(exportData, null, 2);
+      const blob = new Blob([jsonString], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+      const fileName = `flashcards_${timestamp}.json`;
+      
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
 </script>
 
 <div class="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">
@@ -131,6 +154,10 @@
   </div>
   {#if flashcards.length > 0}
   <div class="max-w-4xl w-full mt-8 bg-white p-6 rounded-xl shadow-md h-2/3 overflow-y-auto">
+    <button on:click={exportFlashcards} class="w-full py-2 px-4 mb-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-400 flex items-center justify-center">
+      <Download class="mr-2 h-5 w-5" />
+      Export Flashcards
+    </button>
     <div class="overflow-x-auto pb-4">
       <div class="flex space-x-4" style="width: max-content;">
         {#each flashcards as flashcard, index}
